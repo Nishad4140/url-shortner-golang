@@ -48,16 +48,14 @@ func ShortenURL(c *fiber.Ctx) error {
 		}
 	}
 
-	//check if the input sent by the user is actual url
 	if !govalidator.IsURL(body.URL) {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid url"})
 	}
 
-	//check for domain error
 	if !helpers.RemoveDomainError(body.URL) {
 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"error": ""})
 	}
-	//enforce https,ssl
+
 	body.URL = helpers.EnforceHTTP(body.URL)
 
 	var id string
